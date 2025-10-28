@@ -1,0 +1,43 @@
+// Demonstração da linguagem
+
+// Req 1 e 5: Declarações e Atribuições
+inteiro x;
+real y;
+booleano pronto;
+
+x = 10;
+y = 5.5 + (x * 2); // Req 4: Precedência de operadores
+pronto = verdadeiro;
+
+// Req 6: Saída
+escreva(y); // Deve escrever 25.5
+
+// Req 2: Estrutura Condicional
+se (pronto e (x > 5)) {
+    escreva(1); // true
+} senao {
+    escreva(0); // false
+}
+
+// Req 3: Estrutura de Repetição
+inteiro contador;
+contador = 0;
+enquanto (contador < 3) {
+    escreva(contador);
+    contador = contador + 1;
+}
+
+// Req 6: Entrada
+escreva(999);
+leia(x);
+escreva(x);
+
+{
+    inteiro x;
+    x = 100;
+    escreva(x);
+}
+escreva(x);
+
+// Exemplo de ERRO DE TIPO (será pego pelo MyLangChecker)
+y = 10 + falso;
