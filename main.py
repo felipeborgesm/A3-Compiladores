@@ -1,52 +1,50 @@
 import sys
 from antlr4 import *
-from MyLangLexer import MyLangLexer
-from MyLangParser import MyLangParser
-from MyLangChecker import MyLangChecker, ErroSemantico
+from RexLexer import RexLexer
+from RexParser import RexParser
+from RexChecker import RexChecker
+from RexInterpreter import RexInterpreter
 
 def main(argv):
     if len(argv) < 2:
-        print("Uso: python main.py <arquivo_fonte.mylang>")
+        print("Uso: python main.py <arquivo_fonte.rex>")
         return
 
     input_stream = FileStream(argv[1], encoding='utf-8')
-    
-    # 1. Lexer
-    lexer = MyLangLexer(input_stream)
+    lexer = RexLexer(input_stream)
     stream = CommonTokenStream(lexer)
-    
-    # 2. Parser
-    parser = MyLangParser(stream)
+    parser = RexParser(stream)
     
     try:
         tree = parser.programa()
         
         print(f"Análise Sintática Concluída com Sucesso para: {argv[1]}\n")
 
-        # ===================================================================
-        # DEMONSTRAÇÃO DA ÁRVORE DE ANÁLISE (PARSE TREE)
-        # ===================================================================
+        # 1. Árvore de Análise (PARSE TREE)
         print("--- Árvore de Análise (Parse Tree LISP-style) ---")
-        # O 'recog=parser' é essencial para obter os nomes das regras
         print(tree.toStringTree(recog=parser))
-        print("---------------------------------------------------\n")
+        print("Análise Sintática: OK")
+        print("-" * 40)
 
-        
-        # ===================================================================
-        # PASSO 3: Análise Semântica (Verificação de Tipos e Escopo)
-        # ===================================================================
-        print("Iniciando Análise Semântica (Tipos e Escopo)...")
-        checker = MyLangChecker()
-        checker.visit(tree)
-        
-        print("\nAnálise Semântica Concluída com Sucesso.")
-        print("Todos os tipos e escopos estão corretos.")
+        # 2. Análise Semântica (Verifica Tipos)
+        print("Análise Semântica: Verificando...")
+        checker = RexChecker()
+        checker.visit(tree) 
+        print("Análise Semântica: OK (Nenhum erro encontrado)")
+        print("-" * 40)
+        print("EXECUTANDO O PROGRAMA:")
+        print("-" * 40)
 
-    except ErroSemantico as e:
-        print(e)
+        # 3. Interpretação (Executa o código)
+        interpreter = RexInterpreter()
+        interpreter.visit(tree)
+
+    except Exception as e:
+        print(f"\n[ERRO DE COMPILAÇÃO]: {e}")
+        print("O programa não pode ser executado devido a erros semânticos.")
         
     except Exception as e:
-        print(f"Ocorreu um erro: {e}")
+        print(f"Ocorreu um erro inesperado: {e}")
 
 if __name__ == '__main__':
     main(sys.argv)

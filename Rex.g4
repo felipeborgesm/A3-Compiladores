@@ -1,4 +1,4 @@
-grammar MyLang;
+grammar Rex;
 
 programa: (comando)* EOF;
 
@@ -24,6 +24,7 @@ tipo
     : 'inteiro'
     | 'real'
     | 'booleano'
+    | 'texto'
     ;
 
 // Req 5: Atribuição
@@ -65,6 +66,7 @@ atom
     | 'verdadeiro'       # atomBooleanoTrue
     | 'falso'            # atomBooleanoFalse
     | ID                 # atomId
+    | STRING             # atomString
     ;
 
 // Identificador (nome de variável)
@@ -75,7 +77,9 @@ NUM_INT: [0-9]+;
 NUM_REAL: [0-9]+ '.' [0-9]+;
 
 // Req 7: Tokens Descartados (Espaços, tabs, quebras de linha)
+STRING: '\'' .*? '\'';
+
 WS: [ \t\r\n]+ -> skip;
 
-COMENTARIO_LINHA: '//' .*? '\n' -> skip;
-COMENTARIO_BLOCO: '/*' .*? '*/' -> skip;// Define o nome da gramática. O ANTLR gerará arquivos como MyLangLexer.py, MyLangParser.py, etc.
+COMENTARIO_LINHA: '//' ~[\r\n]* -> skip;
+COMENTARIO_BLOCO: '/*' .*? '*/' -> skip;
