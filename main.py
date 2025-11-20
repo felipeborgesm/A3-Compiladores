@@ -5,6 +5,20 @@ from RexParser import RexParser
 from RexChecker import RexChecker
 from RexInterpreter import RexInterpreter
 
+from antlr4.tree.Tree import TerminalNodeImpl
+
+def print_tree(tree, parser, indent=0):
+    prefix = "  " * indent    
+    if isinstance(tree, TerminalNodeImpl):
+        if tree.getText() != "<EOF>":
+            print(f"{prefix}'{tree.getText()}'")
+    else:
+        rule_name = parser.ruleNames[tree.getRuleIndex()]
+        print(f"{prefix}{rule_name}")
+        
+        for i in range(tree.getChildCount()):
+            print_tree(tree.getChild(i), parser, indent + 1)
+
 def main(argv):
     if len(argv) < 2:
         print("Uso: python main.py <arquivo_fonte.rex>")
@@ -21,10 +35,11 @@ def main(argv):
         print(f"Análise Sintática Concluída com Sucesso para: {argv[1]}\n")
 
         # 1. Árvore de Análise (PARSE TREE)
-        print("--- Árvore de Análise (Parse Tree LISP-style) ---")
-        print(tree.toStringTree(recog=parser))
-        print("Análise Sintática: OK")
-        print("-" * 40)
+        # print("--- Árvore de Análise ---")
+        # DESCOMENTE PARA VER A ÁRVORE DE ANÁLISE NO TERMINAL
+        # print_tree(tree, parser)
+        # print("Análise Sintática: OK")
+        # print("-" * 40)
 
         # 2. Análise Semântica (Verifica Tipos)
         print("Análise Semântica: Verificando...")
