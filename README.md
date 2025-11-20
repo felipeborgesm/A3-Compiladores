@@ -10,7 +10,7 @@
 
 ## Para rodar o projeto
 
-### Baixe o JAR do ANTLR4 (já está no repositório)
+### Baixe o JAR do ANTLR4 e mova o .jar para o repositório (já está presente)
 
 > https://www.antlr.org/download.html
 
@@ -20,14 +20,22 @@
 pip install antlr4-python3-runtime
 ```
 
-### Gerar os arquivos (já estão no repositório) ou atualizar caso mude a linguagem
-
+### Gere ou atualize os arquivos de sintaxe da linguagem (já estão no repositório)
 ```
 java -jar antlr-4.13.1-complete.jar -Dlanguage=Python3 Rex.g4
+
+java -jar antlr-4.13.2-complete.jar -o java_debugger -no-listener -no-visitor Rex.g4
+
+javac -cp ".;antlr-4.13.2-complete.jar" java_debugger/*.java
 ```
 
-### Para usar o arquivo de teste
-
+### Usando os arquivos de teste (estão na pasta testes)
+- Gerar árvore sintática:
 ```
-python main.py teste.rex
+java -cp "java_debugger;antlr-4.13.2-complete.jar" org.antlr.v4.gui.TestRig Rex programa -gui testes/NOME_DO_ARQUIVO_DE_TESTE.rex
+```
+
+- Gerar output no terminal:
+```
+python main.py testes/NOME_DO_ARQUIVO_DE_TESTE.rex
 ```
